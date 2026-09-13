@@ -16,3 +16,11 @@ def init_db():
     """)
     conn.commit()
     conn.close()
+
+# Función para inicializar el socket del servidor
+def init_socket():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(("localhost",5000))
+    server.listen(5)
+    return server
