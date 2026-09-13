@@ -24,3 +24,9 @@ def init_socket():
     server.bind(("localhost",5000))
     server.listen(5)
     return server
+
+# Punto de entrada del programa (se ejecuta al correr python server.py)
+if __name__ == "__main__":
+    init_db()
+    server = init_socket()
+    print("Servidor escuchando en localhost:5000...")
