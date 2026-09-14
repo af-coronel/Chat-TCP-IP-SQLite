@@ -60,3 +60,4 @@ if __name__ == "__main__":
     init_db()
     server = init_socket()
     print("Servidor escuchando en localhost:5000...")
+    run_server(server)
