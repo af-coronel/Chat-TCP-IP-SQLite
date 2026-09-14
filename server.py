@@ -36,6 +36,25 @@ def save_message(contenido, ip_cliente):
     conn.commit()
     conn.close()
 
+# Función principal: acepta conexiones, recibe, guarda y responde
+def run_server(server):
+    while True:
+        client, addr = server.accept()
+        print(f"Cliente conectado desde: {addr[0]}:{addr[1]}")
+
+        data = client.recv(1024)
+        if not data:
+            client.close()
+            continue
+
+        mensaje = data.decode("utf-8")
+        ip_cliente = addr[0]
+        save_message(mensaje, ip_cliente)
+
+        respuesta = f"Mensaje recibido: {mensaje}"
+        client.send(respuesta.encode("utf-8"))
+        client.close()
+
 # Punto de entrada del programa
 if __name__ == "__main__":
     init_db()
