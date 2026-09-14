@@ -25,7 +25,18 @@ def init_socket():
     server.listen(5)
     return server
 
-# Punto de entrada del programa (se ejecuta al correr python server.py)
+# Función para guardar un mensaje en la base de datos
+def save_message(contenido, ip_cliente):
+    conn = sqlite3.connect("chat.db")
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO mensaje (contine, ip_cliente) VALUES (?, ?)",
+        (contenido, ip_cliente),
+    )
+    conn.commit()
+    conn.close()
+
+# Punto de entrada del programa
 if __name__ == "__main__":
     init_db()
     server = init_socket()
