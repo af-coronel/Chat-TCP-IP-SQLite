@@ -22,7 +22,11 @@ def run_client():
               "Escribí un mensaje o 'éxito' para salir.")
 
         while True:
-            mensaje = input("Mensaje: ").strip()
+            try:
+                mensaje = input("Mensaje: ").strip()
+            except EOFError:
+                print("\nEntrada cerrada. Saliendo del chat...")
+                break
             if mensaje.lower() == "éxito":
                 print("Saliendo del chat...")
                 break
