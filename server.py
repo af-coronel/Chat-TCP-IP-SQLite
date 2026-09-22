@@ -1,6 +1,7 @@
 #Servidor de Chat: Escucha mensajes y los guarda en SQLite:
 import socket
 import sqlite3
+from datetime import datetime
 
 # Función para inicializar la base de datos
 def init_db():
@@ -26,12 +27,12 @@ def init_socket():
     return server
 
 # Función para guardar un mensaje en la base de datos
-def save_message(contenido, ip_cliente):
+def save_message(contenido, ip_cliente, timestamp):
     conn = sqlite3.connect("chat.db")
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO mensajes (contenido, ip_cliente) VALUES (?, ?)",
-        (contenido, ip_cliente),
+        "INSERT INTO mensajes (contenido, fecha_envio, ip_cliente) VALUES (?, ?, ?)",
+        (contenido, timestamp, ip_cliente),
     )
     conn.commit()
     conn.close()
@@ -49,9 +50,10 @@ def run_server(server):
 
         mensaje = data.decode("utf-8")
         ip_cliente = addr[0]
-        save_message(mensaje, ip_cliente)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        save_message(mensaje, ip_cliente, timestamp)
 
-        respuesta = f"Mensaje recibido: {mensaje}"
+        respuesta = f"Mensaje recibido: {timestamp}"
         client.send(respuesta.encode("utf-8"))
         client.close()
 
