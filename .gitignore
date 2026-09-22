@@ -1,0 +1,7 @@
+# Artefactos de ejecución
+__pycache__/
+*.pyc
+chat.db
+
+# Directorios de herramientas locales
+.atl/
