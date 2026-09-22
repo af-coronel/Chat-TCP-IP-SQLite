@@ -30,7 +30,7 @@ def save_message(contenido, ip_cliente):
     conn = sqlite3.connect("chat.db")
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO mensaje (contine, ip_cliente) VALUES (?, ?)",
+        "INSERT INTO mensajes (contenido, ip_cliente) VALUES (?, ?)",
         (contenido, ip_cliente),
     )
     conn.commit()
