@@ -61,26 +61,29 @@ def save_message(contenido, ip_cliente, timestamp):
 # Función principal: acepta conexiones, recibe, guarda y responde
 def run_server(server):
     while True:
+        client = None
         try:
             client, addr = server.accept()
             print(f"Cliente conectado desde: {addr[0]}:{addr[1]}")
 
-            data = client.recv(1024)
-            if not data:
-                client.close()
-                continue
+            # Mantener la conexión abierta para recibir múltiples mensajes
+            while True:
+                data = client.recv(1024)
+                if not data:
+                    break
 
-            mensaje = data.decode("utf-8")
-            ip_cliente = addr[0]
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            save_message(mensaje, ip_cliente, timestamp)
+                mensaje = data.decode("utf-8")
+                ip_cliente = addr[0]
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                save_message(mensaje, ip_cliente, timestamp)
 
-            respuesta = f"Mensaje recibido: {timestamp}"
-            client.send(respuesta.encode("utf-8"))
-            client.close()
+                respuesta = f"Mensaje recibido: {timestamp}"
+                client.send(respuesta.encode("utf-8"))
         except (OSError, sqlite3.Error, UnicodeDecodeError) as e:
             print(f"[ERROR] Al procesar la conexión: {e}")
-            client.close()
+        finally:
+            if client:
+                client.close()
 
 
 # Punto de entrada del programa
